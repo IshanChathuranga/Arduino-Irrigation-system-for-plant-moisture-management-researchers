@@ -3,10 +3,10 @@ include <HX711_ADC.h>
 include <EEPROM.h>
 
 //pins:
-const int HX711_dout_1 = 4; //mcu > HX711 no 1 dout pin
-const int HX711_sck_1 = 5; //mcu > HX711 no 1 sck pin
-const int HX711_dout_2 = 2; //mcu > HX711 no 2 dout pin
-const int HX711_sck_2 = 3; //mcu > HX711 no 2 sck pin
+const int HX711_dout_1 = 4; 
+const int HX711_sck_1 = 5; 
+const int HX711_dout_2 = 2; 
+const int HX711_sck_2 = 3; 
 
 //HX711 constructor (dout pin, sck pin)
 HX711_ADC LoadCell_1(HX711_dout_1, HX711_sck_1); //HX711 1
@@ -32,13 +32,8 @@ void setup() {
   float calibrationValue_1; // calibration value load cell 1
   float calibrationValue_2; // calibration value load cell 2
 
-  calibrationValue_1 = -107.6; // uncomment this if you want to set this value in the sketch
-  calibrationValue_2 = -107.6; // uncomment this if you want to set this value in the sketch
-#if defined(ESP8266) || defined(ESP32)
-  //EEPROM.begin(512); // uncomment this if you use ESP8266 and want to fetch the value from eeprom
-#endif
-  //EEPROM.get(calVal_eepromAdress_1, calibrationValue_1); // uncomment this if you want to fetch the value from eeprom
-  //EEPROM.get(calVal_eepromAdress_2, calibrationValue_2); // uncomment this if you want to fetch the value from eeprom
+  calibrationValue_1 = -107.6; 
+  calibrationValue_2 = -107.6;
 
   LoadCell_1.begin();
   LoadCell_2.begin();
@@ -60,20 +55,13 @@ void setup() {
   LoadCell_2.setCalFactor(calibrationValue_2); // user set calibration value (float)
   Serial.println("Startup is complete");
 
-   // receive command from serial terminal, send 't' to initiate tare operation:
-  //Serial.println("Please press t for Tare");
-  //while(Serial.available() == 0){
-    
- //}
+   
   
-  //if (Serial.available() > 0) {
     float i;
-    //char inByte = Serial.read();
-    //if (inByte == 't') {
+    
       LoadCell_1.tareNoDelay();
       LoadCell_2.tareNoDelay();
-    //}
-  //}
+  
 
   //check if last tare operation is complete
   if (LoadCell_1.getTareStatus() == true) {
