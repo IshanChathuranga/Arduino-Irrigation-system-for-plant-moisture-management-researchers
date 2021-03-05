@@ -1,21 +1,13 @@
-//-------------------------------------------------------------------------------------
-// HX711_ADC.h
-// Arduino master library for HX711 24-Bit Analog-to-Digital Converter for Weigh Scales
-// Olav Kallhovd sept2017
-// Tested with      : HX711 asian module on channel A and YZC-133 3kg load cell
-// Tested with MCU  : Arduino Nano
-//-------------------------------------------------------------------------------------
-// This is an example sketch on how to use this library for two ore more HX711 modules
-// Settling time (number of samples) and data filtering can be adjusted in the config.h file
 
-#include <HX711_ADC.h>
-#include <EEPROM.h>
+
+include <HX711_ADC.h>
+include <EEPROM.h>
 
 //pins:
-const int HX711_dout_1 = 4; //mcu > HX711 no 1 dout pin
-const int HX711_sck_1 = 5; //mcu > HX711 no 1 sck pin
-const int HX711_dout_2 = 2; //mcu > HX711 no 2 dout pin
-const int HX711_sck_2 = 3; //mcu > HX711 no 2 sck pin
+const int HX711_dout_1 = 4; 
+const int HX711_sck_1 = 5; 
+const int HX711_dout_2 = 2; 
+const int HX711_sck_2 = 3; 
 
 //HX711 constructor (dout pin, sck pin)
 HX711_ADC LoadCell_1(HX711_dout_1, HX711_sck_1); //HX711 1
@@ -43,11 +35,6 @@ void setup() {
 
   calibrationValue_1 = -107.6; // uncomment this if you want to set this value in the sketch
   calibrationValue_2 = -107.6; // uncomment this if you want to set this value in the sketch
-#if defined(ESP8266) || defined(ESP32)
-  //EEPROM.begin(512); // uncomment this if you use ESP8266 and want to fetch the value from eeprom
-#endif
-  //EEPROM.get(calVal_eepromAdress_1, calibrationValue_1); // uncomment this if you want to fetch the value from eeprom
-  //EEPROM.get(calVal_eepromAdress_2, calibrationValue_2); // uncomment this if you want to fetch the value from eeprom
 
   LoadCell_1.begin();
   LoadCell_2.begin();
@@ -69,20 +56,13 @@ void setup() {
   LoadCell_2.setCalFactor(calibrationValue_2); // user set calibration value (float)
   Serial.println("Startup is complete");
 
-   // receive command from serial terminal, send 't' to initiate tare operation:
-  //Serial.println("Please press t for Tare");
-  //while(Serial.available() == 0){
-    
- //}
+   
   
-  //if (Serial.available() > 0) {
     float i;
-    //char inByte = Serial.read();
-    //if (inByte == 't') {
+    if (inByte == 't') {
       LoadCell_1.tareNoDelay();
       LoadCell_2.tareNoDelay();
-    //}
-  //}
+    
 
   //check if last tare operation is complete
   if (LoadCell_1.getTareStatus() == true) {
@@ -114,37 +94,22 @@ void loop() {
       if( k > 3500){
       if( k < u){
         for(m; m<1 ; m++){
-          /*Serial.print("u at begini = ");
-          Serial.print(u);
-          Serial.print("  k at begin =  ");
-          Serial.println(k); */
-        //Serial.flush();
+          
         Serial.print("please enter the pot number: , ");
-        //Serial.print(" ,  ");
         
         while(Serial.available() == 0){
         }
         delay(5000);
         pot = Serial.readString();
-        //Serial.print(pot);
-        //Serial.print(pot);
-        //Serial.print(" ,");
-        //Serial.print(" ,");
-        //Serial.print(pot);
-       // Serial.print(" ,");
-        //Serial.print(pot);
+        
         Serial.print(" ,");
         Serial.print("  Initial weight is: ");
-        //Serial.print(pot);
         Serial.print(" , ");
         Serial.print(u);
         Serial.print(" ,");
         }
        if(k<5310.8){
-        /*Serial.print("u at mid = ");
-          Serial.print(u);
-          Serial.print("  k at mid =  ");
-          Serial.println(k); */
+        
           digitalWrite(7,HIGH);
 
           while(p < 5310.8-e) {
@@ -168,7 +133,6 @@ void loop() {
     }
   }
           }
-          //delay(1200);
           digitalWrite(7,LOW);
         
       }
@@ -185,13 +149,7 @@ void loop() {
         Serial.print(p);
         Serial.print("  ,  ");
         Serial.print("remove the pot and wait......");
-        /*Serial.print("testing: ");
-        Serial.print("k= ");
-        Serial.print(k);
-        Serial.print("u= ");
-        Serial.print(u);
-        Serial.print("p= ");
-        Serial.print(p);*/
+       
         w=p;
         k=0;
         u=0;
@@ -225,38 +183,17 @@ Serial.print("  ,  ");
         Serial.println("keep the next pot");
       }
       }
-     // Serial.print("Total weight is: ");
-      //Serial.println(k);
+     
       u = k;
       }
       
-      /*Serial.print("Load_cell 1 output val: ");
-      Serial.print(a);
-      Serial.print("    Load_cell 2 output val: ");
-      Serial.println(b);*/
+      
       newDataReady = 0;
       t = millis();
     
   }
 
- /* // receive command from serial terminal, send 't' to initiate tare operation:
-  if (Serial.available() > 0) {
-    float i;
-    char inByte = Serial.read();
-    if (inByte == 't') {
-      LoadCell_1.tareNoDelay();
-      LoadCell_2.tareNoDelay();
-    }
-  }
-
-  //check if last tare operation is complete
-  if (LoadCell_1.getTareStatus() == true) {
-    Serial.println("Tare load cell 1 complete");
-  }
-  if (LoadCell_2.getTareStatus() == true) {
-    Serial.println("Tare load cell 2 complete");
-  }
-  */
+ 
 
 }
 
